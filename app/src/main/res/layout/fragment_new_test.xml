@@ -1,0 +1,140 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hjd.aquasift.NewTestFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/nt_title"
+                android:textSize="30sp"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:textSize="15sp"
+                android:text="@string/nt_select_config"
+                android:layout_marginBottom="5dp"/>
+
+            <Spinner
+                android:layout_width="@dimen/spinner_width"
+                android:layout_height="@dimen/spinner_height"
+                android:id="@+id/select_test_spinner"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:layout_marginBottom="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/nt_deposition_time"
+                android:id="@+id/custom_test_t1"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:textSize="16sp"
+                android:inputType="number"
+                android:id="@+id/custom_test_e1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/nt_selected_filter"
+                android:id="@+id/custom_test_t2"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:textSize="16sp"
+                android:inputType="number"
+                android:id="@+id/custom_test_e2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/nt_sweep_rate"
+                android:id="@+id/custom_test_t3"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:textSize="16sp"
+                android:inputType="number"
+                android:id="@+id/custom_test_e3"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/nt_sample_interval"
+                android:id="@+id/custom_test_t4"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:textSize="16sp"
+                android:inputType="number"
+                android:id="@+id/custom_test_e4"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:textSize="15sp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/nt_record_sequence"
+                android:id="@+id/custom_test_t5"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                android:layout_marginBottom="15dp"
+                android:textSize="16sp"
+                android:inputType="number"
+                android:id="@+id/custom_test_e5"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:text="@string/nt_start_test"
+                android:layout_gravity="center"
+                android:id="@+id/start_test_button"/>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="armeabi-v7a,armeabi"
+    api-level="19"
+    density="xxhdpi"
+    format="7"
+    timestamp="710749326916818"
+    verifier="COMPATIBLE" >
+
+    <task
+        name="javac"
+        duration="221" />
+    <task
+        name="instant-run-dex"
+        duration="490" />
+    <task
+        name="instant-run-transform"
+        duration="36" />
+    <task
+        name="verifier"
+        duration="3" />
+
+    <artifact
+        location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\reload-dex\debug\classes.dex"
+        type="RELOAD_DEX" />
+
+    <build timestamp="709989158215589" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+    <build
+        timestamp="710171461401480"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\builds\debug\710171461401480\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="710260072525350"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\builds\debug\710260072525350\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="710372153642261"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\builds\debug\710372153642261\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="710611558146138"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\builds\debug\710611558146138\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="710654642398606"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\builds\debug\710654642398606\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="710749326916818"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\reload-dex\debug\classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+
+</instant-run>

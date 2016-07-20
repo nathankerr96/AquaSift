@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">AquaSift</string>
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+
+    <!--Names of fragments to put in drawer-->
+    <string-array name="fragment_names">
+        <item>New Test</item>
+        <item>History</item>
+        <item>Settings</item>
+    </string-array>
+
+
+    <!--Strings for New Test Fragment-->
+    <string name="nt_title">Start New Test</string>
+    <string name="nt_select_config">Select Configuration:</string>
+    <string-array name="available_tests">
+        <item>Arsenic</item>
+        <item>Other</item>
+        <item>Custom</item>
+    </string-array>
+    <string name="nt_deposition_time">Deposition Time (ms):</string>
+    <string name="nt_selected_filter">Select Filter:</string>
+    <string name="nt_sweep_rate">Sweep Rate (mV/s):</string>
+    <string name="nt_sample_interval">ADC Sample Interval (ms):</string>
+    <string name="nt_record_sequence">Record Deposition Sequence?</string>
+    <string name="nt_start_test">Start Test</string>
+
+    <string-array name="custom_test_texts">
+        <item>Deposition Time (ms):</item>
+        <item>Select Filter:</item>
+        <item>Sweep Rate (mV/s)</item>
+        <item>ADC Sample Interval (ms)</item>
+        <item>Record Deposition Sequence?</item>
+    </string-array>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

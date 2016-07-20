@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Image ids of above fragments, should be in same order-->
+    <array name="fragment_pictures">
+        <item>@drawable/ic_new_test</item>
+        <item>@drawable/ic_history</item>
+        <item>@drawable/ic_settings</item>
+    </array>
+
+    <!--Ids of textviews in new test's custom option-->
+    <array name="custom_test_textviews">
+        <item>@id/custom_test_t1</item>
+        <item>@id/custom_test_t2</item>
+        <item>@id/custom_test_t3</item>
+        <item>@id/custom_test_t4</item>
+        <item>@id/custom_test_t5</item>
+    </array>
+
+    <!--Ids of edittexts in new test's custom option-->
+    <integer-array name="custom_test_edittexts">
+        <item>@id/custom_test_e1</item>
+        <item>@id/custom_test_e2</item>
+        <item>@id/custom_test_e3</item>
+        <item>@id/custom_test_e4</item>
+        <item>@id/custom_test_e5</item>
+    </integer-array>
+
+
+</resources>

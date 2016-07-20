@@ -1,0 +1,9 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!--Dimensions for the New Test Fragment-->
+    <dimen name="spinner_width">100dp</dimen>
+    <dimen name="spinner_height">30dp</dimen>
+</resources>
