@@ -8,8 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.hjd.aquasift.MainActivity;
-import com.example.hjd.aquasift.NewTestFragment;
+import com.example.hjd.aquasift.Main.NewTestFragment;
 import com.example.hjd.aquasift.R;
 
 public class CustomTestAdapter extends BaseAdapter{

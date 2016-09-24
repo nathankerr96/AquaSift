@@ -1,2 +1,0 @@
-CHANGED,C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\transforms\instantRun\debug\folders\1\5\main\com\example\hjd\aquasift\StartTest$SaveData.class
-CHANGED,C:\Users\HJD\AndroidStudioProjects\AquaSift\app\build\intermediates\transforms\instantRun\debug\folders\1\5\main\com\example\hjd\aquasift\HistoryFragment.class

@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hjd.aquasift.MainActivity;
+import com.example.hjd.aquasift.Main.MainActivity;
 import com.example.hjd.aquasift.R;
 
 
