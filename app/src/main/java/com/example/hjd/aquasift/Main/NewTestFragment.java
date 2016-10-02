@@ -23,8 +23,16 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.hjd.aquasift.Misc.TestType;
 import com.example.hjd.aquasift.Misc.UsbHelper;
 import com.example.hjd.aquasift.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 
 /**
@@ -87,8 +95,51 @@ public class NewTestFragment extends Fragment {
 
         //Set up spinner to choose type of test
         Spinner select_test = (Spinner) view.findViewById(R.id.select_test_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.available_tests, android.R.layout.simple_spinner_item);
+
+
+        TestType[] savedTests = {};
+        File settingsFile = new File(getContext().getFilesDir(), TestType.TESTS_FILE_NAME);
+        FileInputStream fis;
+        try {
+            fis = new FileInputStream(settingsFile);
+        } catch (FileNotFoundException e) {
+            fis = null;
+        }
+        ObjectInputStream ois = null;
+        if (fis != null) {
+            try {
+                ois = new ObjectInputStream(fis);
+            } catch (IOException e) {
+                ois = null;
+                e.printStackTrace();
+            }
+        }
+        if (ois != null) {
+            try {
+                savedTests = (TestType[])ois.readObject();
+            } catch (IOException|ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        TestType[] defaultTests = {};
+        String[] defaultTestNames;
+        int[][] defaultTestSettings;
+        TypedArray defaultTestNamesTyped = view.getResources().obtainTypedArray(R.array.available_tests);
+
+
+        defaultTestNamesTyped.recycle();
+
+        String[] test_types = new String[defaultTests.length + savedTests.length];
+        for (int i=0; i<defaultTests.length; i++) {
+            test_types[i] = defaultTests[i].testName;
+        }
+
+
+
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+         //       R.array.available_tests, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, test_types);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         select_test.setAdapter(adapter);
 

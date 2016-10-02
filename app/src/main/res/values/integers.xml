@@ -26,5 +26,60 @@
         <item>@id/custom_test_e5</item>
     </integer-array>
 
+    <!--Settings for default tests, *MUST MATCH ORDER OF TEST NAMES IN STRINGS*-->
+    <array name = "defaultTestIds">
+        <item>@array/arsenicSettings</item>
+        <item>@array/phosphorousSettings</item>
+    </array>
+
+    <!--Settings array for arsenic test *ORDER DETERMINED BY "setSettings" function-->
+    <integer-array name="arsenicSettings">
+        <item>3</item> <!--Number of Electrodes-->
+        <item>1</item> <!--Sample Output rate-->
+        <item>1</item> <!--Gain Resistor-->
+        <item>1</item> <!--Enable Deposition-->
+        <item>3000</item> <!--Deposition time-->
+        <item>-500</item> <!--Deposition Voltage-->
+        <item>0</item> <!--Quiet Time-->
+        <item>1</item> <!--Record Deposition Sequence-->
+        <item>-500</item> <!--Linear Sweep Start Voltage-->
+        <item>500</item> <!--Linear Sweep End Voltage-->
+        <item>10</item> <!--Sweep Rate-->
+        <item>0</item> <!--Cyclic-->
+        <item>5</item> <!--Number of Cycles-->
+        <item>-500</item> <!--Differential Pulse Start Voltage-->
+        <item>500</item> <!--Differential Pulse End Voltage-->
+        <item>50</item> <!--Differential Pulse Increment-->
+        <item>100</item> <!--Differential Pulse Pulse Voltage-->
+        <item>150</item> <!--Differential Pulse Pre Pulse Time-->
+        <item>20</item> <!--Differential Pulse Pulse Time-->
+        <item>1</item> <!--Sampling Window Width-->
+        <item>0</item> <!--Selected Low Pass Filter-->
+    </integer-array>
+
+    <integer-array name="phosphorousSettings">
+        <item>3</item> <!--Number of Electrodes-->
+        <item>1</item> <!--Sample Output rate-->
+        <item>1</item> <!--Gain Resistor-->
+        <item>1</item> <!--Enable Deposition-->
+        <item>3000</item> <!--Deposition time-->
+        <item>-500</item> <!--Deposition Voltage-->
+        <item>0</item> <!--Quiet Time-->
+        <item>1</item> <!--Record Deposition Sequence-->
+        <item>-500</item> <!--Linear Sweep Start Voltage-->
+        <item>500</item> <!--Linear Sweep End Voltage-->
+        <item>10</item> <!--Sweep Rate-->
+        <item>0</item> <!--Cyclic-->
+        <item>5</item> <!--Number of Cycles-->
+        <item>-500</item> <!--Differential Pulse Start Voltage-->
+        <item>500</item> <!--Differential Pulse End Voltage-->
+        <item>50</item> <!--Differential Pulse Increment-->
+        <item>100</item> <!--Differential Pulse Pulse Voltage-->
+        <item>150</item> <!--Differential Pulse Pre Pulse Time-->
+        <item>20</item> <!--Differential Pulse Pulse Time-->
+        <item>1</item> <!--Sampling Window Width-->
+        <item>0</item> <!--Selected Low Pass Filter-->
+    </integer-array>
+
 
 </resources>

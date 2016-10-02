@@ -245,7 +245,7 @@ public class StartTest extends AppCompatActivity {
                         if(value == 0x8000 || value == 0xFF00 || value == 0x8200 || value == 0x0001 ||
                                 value == 0xFFF0) {
                             Log.d("DEBUGGING", "Skipping value: " + Integer.toString(value));
-                            dataToAdd[i/2] = new DataPoint(count, 1000);
+                               dataToAdd[i/2] = new DataPoint(count, 1000);
                             count++;
                             continue;
                         }
