@@ -170,14 +170,16 @@ public class StartTest extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(List<DataPoint>... dp) {
+            int nextSeries = 0;
             if (nextSweep) {
-                DataPoint[] previousTestDataPoints = new DataPoint[]
+                for (DataPoint dataPoint : dp[0]) {
+                    lineGraphSeriesArrayList.get(currentSweepNum-1).appendData(dataPoint, false, 2000000);
+                }
+                nextSeries++;
             }
 
-            DataPoint[] newDataPointsArray = new DataPoint[dp.length];
-            for (int i=0; i<dp[0].size(); i++) {
-                newDataPointsArray[i] = dp[0].get(i);
-                lineGraphSeriesArrayList.get(currentSweepNum).
+            for (int i=0; i<dp[nextSeries].size(); i++) {
+                lineGraphSeriesArrayList.get(currentSweepNum).appendData(dp[nextSeries].get(i), false, 2000000);
             }
 
 
