@@ -11,6 +11,8 @@ import android.util.Log;
 import java.beans.PropertyChangeSupport;
 import java.util.Arrays;
 
+import static java.lang.Math.abs;
+
 /**
  * Created by HJD on 9/5/2016.
  */
@@ -145,6 +147,8 @@ public class UsbHelper {
         deviceConnection = null;
     }
 
+
+
     //0: Success
     //1: Could not find device
     //2: Does not have permission to access device
@@ -214,6 +218,36 @@ public class UsbHelper {
         currentSettings.logSettings();
 
         return true;
+    }
+
+    //Getter Methods
+    public int getDepositionTime() {
+        if (currentSettings.depositionOn == 0) {
+            return 0;  //Return 0 if deposition is disabled
+        }
+
+        return currentSettings.depositionTime;
+    }
+
+    //Calculates mV increment per data point output
+    public int getSweepVoltageIncrement() {
+        int startVoltage = currentSettings.linearSweepStartVoltage;
+        int endVoltage = currentSettings.linearSweepEndVoltage;
+        int dataRate = currentSettings.dataRateOut;
+        int sweepRate = currentSettings.linearSweepRate;
+
+        int testTime = abs(startVoltage - endVoltage) / sweepRate; //test time in seconds
+        int numDataPoints = (testTime*1000)/dataRate;
+
+        return abs(startVoltage-endVoltage) / numDataPoints;
+    }
+
+    public int getSweepStartVoltage() {
+        return currentSettings.linearSweepStartVoltage;
+    }
+
+    public int getNumCycles() {
+        return currentSettings.linearSweepNumCycles;
     }
 
     //sets mode; 0=Binary, 1=ASCII, 2=MatLab

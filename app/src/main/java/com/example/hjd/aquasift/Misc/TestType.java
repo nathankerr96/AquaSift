@@ -15,8 +15,9 @@ public class TestType implements Serializable{
     public int[] settings;
 
 
-    TestType(String testName, int[] settings) {
+    public TestType(String testName, int[] settings) {
         this.testName = testName;
+        this.settings = new int[settings.length];
         System.arraycopy(settings, 0, this.settings, 0, settings.length);
     }
 }

@@ -122,13 +122,36 @@ public class NewTestFragment extends Fragment {
             }
         }
 
-        TestType[] defaultTests = {};
-        String[] defaultTestNames;
-        int[][] defaultTestSettings;
+
+
+
         TypedArray defaultTestNamesTyped = view.getResources().obtainTypedArray(R.array.available_tests);
+        String[] defaultTestNames = new String[defaultTestNamesTyped.length()];
+        for (int i = 0; i<defaultTestNamesTyped.length(); i++) {
+            defaultTestNames[i] = defaultTestNamesTyped.getString(i); //TODO only assign defaultnamestyped once
 
-
+        }
         defaultTestNamesTyped.recycle();
+
+        TypedArray defaultTestIds = view.getResources().obtainTypedArray(R.array.defaultTestIds);
+        int[][] defaultTestSettings = new int[defaultTestIds.length()][];
+        for (int i=0; i<defaultTestIds.length(); i++) {
+            int testParamsID = defaultTestIds.getResourceId(i, 0);
+
+            defaultTestSettings[i] = view.getResources().getIntArray(testParamsID);
+
+        }
+        defaultTestIds.recycle();
+
+        TestType[] defaultTests = new TestType[defaultTestNames.length];
+        for (int i=0; i<defaultTestIds.length(); i++) {
+            defaultTests[i] = new TestType(defaultTestNames[i], defaultTestSettings[i]);
+        }
+
+
+
+
+
 
         String[] test_types = new String[defaultTests.length + savedTests.length];
         for (int i=0; i<defaultTests.length; i++) {
@@ -161,7 +184,7 @@ public class NewTestFragment extends Fragment {
         }
         t_ids.recycle();
 
-        //Get custom test EditTexts using array defined in intergers.xml
+        //Get custom test EditTexts using array defined in integers.xml
         TypedArray e_ids = view.getResources().obtainTypedArray(R.array.custom_test_edittexts);
         for(int i=0; i < e_texts.length; i++) {
             e_texts[i] = (EditText) view.findViewById(e_ids.getResourceId(i,0));
