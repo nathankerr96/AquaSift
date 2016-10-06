@@ -15,6 +15,7 @@ import android.hardware.usb.UsbManager;
 import android.os.AsyncTask;
 import android.os.Process;
 import android.provider.ContactsContract;
+import android.support.annotation.FloatRange;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,8 @@ public class StartTest extends AppCompatActivity {
     GraphView graph;
 
     List<LineGraphSeries<DataPoint>> lineGraphSeriesArrayList;
+
+
 
 
     UsbManager manager;
@@ -79,15 +82,23 @@ public class StartTest extends AppCompatActivity {
 
         usbHelper.setNumElectrodes(2);
         usbHelper.setDataRate(50);
+        usbHelper.enableDeposition(0);
+        usbHelper.setCyclic(1);
+        usbHelper.setNumCycles(2);
         usbHelper.getSettings();
 
 
         graph = (GraphView) findViewById(R.id.graph);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(-1000);
+        graph.getViewport().setMaxX(1000);
+
         lineGraphSeriesArrayList = new ArrayList<>(usbHelper.getNumCycles());
         for (int i=0; i<usbHelper.getNumCycles(); i++) {
             lineGraphSeriesArrayList.add(new LineGraphSeries<DataPoint>());
             graph.addSeries(lineGraphSeriesArrayList.get(i));
         }
+
 
         RunTest runTest = new RunTest();
         runTest.execute();
@@ -130,9 +141,9 @@ public class StartTest extends AppCompatActivity {
 
         protected LineGraphSeries<DataPoint> doInBackground(String... params) {
 
-            int voltageIncrement = usbHelper.getSweepVoltageIncrement();
+            float voltageIncrement = usbHelper.getSweepVoltageIncrement();
             int startVoltage = usbHelper.getSweepStartVoltage();
-            int currentVoltage = startVoltage;
+            float currentVoltage = startVoltage;
 
             while(true) {
                 try {
@@ -160,6 +171,7 @@ public class StartTest extends AppCompatActivity {
                         }
                         newDataPoints.add(new DataPoint(currentVoltage, value));
                         currentVoltage += voltageIncrement;
+                        Log.d("DEBUGGING", "VOLTAGE: "  + Float.toString(currentVoltage));
                     }
 
                     publishProgress(newDataPoints, prevNewDataPoints);
@@ -177,7 +189,7 @@ public class StartTest extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(List<DataPoint>... L) {
             int nextSeries = 0;
-            if (nextSweep) {
+            if (nextSweep && currentSweepNum != 1) {
                 for (DataPoint dataPoint : L[0]) {
                     lineGraphSeriesArrayList.get(currentSweepNum-2).appendData(dataPoint, false, 2000000);
                 }
@@ -188,6 +200,7 @@ public class StartTest extends AppCompatActivity {
                 Log.d("DEBUGGING", "Sweep Num: " + Integer.toString(currentSweepNum));
                 Log.d("DEBUGGING", "NUM: " + Integer.toString(lineGraphSeriesArrayList.size()));
                 lineGraphSeriesArrayList.get(currentSweepNum-1).appendData(dataPoint, false, 2000000);
+                //s.appendData(dataPoint, false, 2000000);
             }
 
 

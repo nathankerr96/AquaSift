@@ -230,14 +230,14 @@ public class UsbHelper {
     }
 
     //Calculates mV increment per data point output
-    public int getSweepVoltageIncrement() {
+    public float getSweepVoltageIncrement() {
         int startVoltage = currentSettings.linearSweepStartVoltage;
         int endVoltage = currentSettings.linearSweepEndVoltage;
         int dataRate = currentSettings.dataRateOut;
         int sweepRate = currentSettings.linearSweepRate;
 
-        int testTime = abs(startVoltage - endVoltage) / sweepRate; //test time in seconds
-        int numDataPoints = (testTime*1000)/dataRate;
+        float testTime = abs(startVoltage - endVoltage) / sweepRate; //test time in seconds
+        float numDataPoints = (testTime*1000)/dataRate;
 
         return abs(startVoltage-endVoltage) / numDataPoints;
     }
