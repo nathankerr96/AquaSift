@@ -84,8 +84,9 @@ public class StartTest extends AppCompatActivity {
 
         graph = (GraphView) findViewById(R.id.graph);
         lineGraphSeriesArrayList = new ArrayList<>(usbHelper.getNumCycles());
-        for (LineGraphSeries<DataPoint> series : lineGraphSeriesArrayList) {
-            graph.addSeries(series);
+        for (int i=0; i<usbHelper.getNumCycles(); i++) {
+            lineGraphSeriesArrayList.add(new LineGraphSeries<DataPoint>());
+            graph.addSeries(lineGraphSeriesArrayList.get(i));
         }
 
         RunTest runTest = new RunTest();
@@ -118,7 +119,7 @@ public class StartTest extends AppCompatActivity {
 
 
         protected void onPreExecute() {
-            currentSweepNum = 0;
+            currentSweepNum = 1;
 
             if(usbHelper.getDepositionTime() != 0) {
                 //TODO Add Progress bar for deposition period
@@ -140,10 +141,14 @@ public class StartTest extends AppCompatActivity {
                     byte[] data = usbHelper.read();
                     Log.d("DEBUGGING", Arrays.toString(data));
                     List<DataPoint> newDataPoints = new ArrayList<>();
+                    List<DataPoint> prevNewDataPoints = null;
                     for(int i=0; i<data.length; i+=2) {
                         int value = ((data[i]&0xFF)<<8) | (data[i+1]&0xFF);
                         if (value == 0x8200) {
                             currentSweepNum = ((data[i+2]&0xFF) | (data[i+3]&0xFF)); //TODO What if array ends in 0x8200?
+                            nextSweep = true;
+                            prevNewDataPoints = newDataPoints;
+                            newDataPoints.clear();
                             i += 2;
                             continue;
                         }
@@ -157,7 +162,7 @@ public class StartTest extends AppCompatActivity {
                         currentVoltage += voltageIncrement;
                     }
 
-                    publishProgress(dataToAdd);
+                    publishProgress(newDataPoints, prevNewDataPoints);
 
                 } catch (Exception e) {
                     //TODO handle exception
@@ -168,18 +173,21 @@ public class StartTest extends AppCompatActivity {
             }
         }
 
+
         @Override
-        protected void onProgressUpdate(List<DataPoint>... dp) {
+        protected void onProgressUpdate(List<DataPoint>... L) {
             int nextSeries = 0;
             if (nextSweep) {
-                for (DataPoint dataPoint : dp[0]) {
-                    lineGraphSeriesArrayList.get(currentSweepNum-1).appendData(dataPoint, false, 2000000);
+                for (DataPoint dataPoint : L[0]) {
+                    lineGraphSeriesArrayList.get(currentSweepNum-2).appendData(dataPoint, false, 2000000);
                 }
-                nextSeries++;
+                nextSeries = 1;
             }
 
-            for (int i=0; i<dp[nextSeries].size(); i++) {
-                lineGraphSeriesArrayList.get(currentSweepNum).appendData(dp[nextSeries].get(i), false, 2000000);
+            for (DataPoint dataPoint : L[nextSeries]) {
+                Log.d("DEBUGGING", "Sweep Num: " + Integer.toString(currentSweepNum));
+                Log.d("DEBUGGING", "NUM: " + Integer.toString(lineGraphSeriesArrayList.size()));
+                lineGraphSeriesArrayList.get(currentSweepNum-1).appendData(dataPoint, false, 2000000);
             }
 
 

@@ -691,14 +691,14 @@ public class UsbHelper {
             return new byte[] {(byte) toConvert};
         }
         if (numBytes == 2) {
-            return new byte[] {(byte)(toConvert & 0xFF),
-                    (byte)((toConvert >>> 8)&0xFF)};
+            return new byte[] {(byte)((toConvert & 0xFF)>>>8),
+                    (byte)((toConvert)&0xFF)};
         }
 
-        return new byte[] {(byte)(toConvert&0xFF),
-                (byte)((toConvert >>> 8)&0xFF),
+        return new byte[] {(byte)((toConvert&0xFF)>>>24),
                 (byte)((toConvert >>> 16)&0xFF),
-                (byte)((toConvert >>> 24)&0xFF)};
+                (byte)((toConvert >>> 8)&0xFF),
+                (byte)((toConvert)&0xFF)};
     }
 
     private boolean claimInterface() {
