@@ -83,8 +83,9 @@ public class StartTest extends AppCompatActivity {
         usbHelper.setNumElectrodes(2);
         usbHelper.setDataRate(50);
         usbHelper.enableDeposition(0);
-        usbHelper.setCyclic(1);
-        usbHelper.setNumCycles(2);
+        usbHelper.setDataRate(50);
+        //usbHelper.setCyclic(0);
+        //usbHelper.setNumCycles(1);
         usbHelper.getSettings();
 
 
@@ -171,7 +172,7 @@ public class StartTest extends AppCompatActivity {
                         }
                         newDataPoints.add(new DataPoint(currentVoltage, value));
                         currentVoltage += voltageIncrement;
-                        Log.d("DEBUGGING", "VOLTAGE: "  + Float.toString(currentVoltage));
+                        //Log.d("DEBUGGING", "VOLTAGE: "  + Float.toString(currentVoltage));
                     }
 
                     publishProgress(newDataPoints, prevNewDataPoints);
@@ -197,8 +198,8 @@ public class StartTest extends AppCompatActivity {
             }
 
             for (DataPoint dataPoint : L[nextSeries]) {
-                Log.d("DEBUGGING", "Sweep Num: " + Integer.toString(currentSweepNum));
-                Log.d("DEBUGGING", "NUM: " + Integer.toString(lineGraphSeriesArrayList.size()));
+                //Log.d("DEBUGGING", "Sweep Num: " + Integer.toString(currentSweepNum));
+                //Log.d("DEBUGGING", "NUM: " + Integer.toString(lineGraphSeriesArrayList.size()));
                 lineGraphSeriesArrayList.get(currentSweepNum-1).appendData(dataPoint, false, 2000000);
                 //s.appendData(dataPoint, false, 2000000);
             }
