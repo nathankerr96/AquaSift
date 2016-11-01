@@ -677,6 +677,7 @@ public class UsbHelper {
     public byte[] read() {
         byte[] readInBuf= new byte[2048];
         int len = deviceConnection.bulkTransfer(inPoint, readInBuf, readInBuf.length, 0);
+
         byte[] toReturnBuf = new byte[len-2];
 
         System.arraycopy(readInBuf, 2, toReturnBuf, 0, len - 2);
