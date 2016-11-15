@@ -9,6 +9,7 @@ import android.hardware.usb.UsbManager;
 import android.util.Log;
 
 import java.beans.PropertyChangeSupport;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import static java.lang.Math.abs;
@@ -246,8 +247,43 @@ public class UsbHelper {
         return currentSettings.linearSweepStartVoltage;
     }
 
+    public int getSweepEndVoltage() {
+        return currentSettings.linearSweepEndVoltage;
+    }
+
     public int getNumCycles() {
+        if (currentSettings.linearSweepCyclic == 0) {
+            return 0;
+        }
         return currentSettings.linearSweepNumCycles;
+    }
+
+    public int getDepositionStatus() {
+        return currentSettings.depositionOn;
+    }
+
+    public int isCyclic() {
+        return currentSettings.linearSweepCyclic;
+    }
+
+    public int getGainResistor() {
+        switch (currentSettings.gainResistor) {
+            case 1:
+                return 100;
+            case 2:
+                return 1000;
+            case 3:
+                return 5100;
+            case 4:
+                return 10000;
+            case 5:
+                return 51000;
+            case 6:
+                return 100000;
+            default:
+                Log.d("DEBUGGING", "Not a valid Gain Resistor");
+                return -1;
+        }
     }
 
     //sets mode; 0=Binary, 1=ASCII, 2=MatLab
@@ -640,6 +676,23 @@ public class UsbHelper {
         }
 
         byte[] value_bytes = getBytes(value, numBytes);
+        /*
+        if (setting == 0x12) {
+            value_bytes = new byte[] {(byte)0xFE, (byte)0xD4};
+        }
+        if (setting == 0x11) {
+            value_bytes = new byte[] {(byte)0x02, (byte)0x58};
+        }
+        if (setting == 0x13) {
+            value_bytes = new byte[] {(byte)0x03, (byte)0x84};
+        }
+        if (setting == 0x0D) {
+            value_bytes = new byte[] {(byte)0x00, (byte)0x00, (byte)0x03, (byte)0xE8};
+        }
+        if (setting == 0x0E) {
+            value_bytes = new byte[] {(byte)0x02, (byte)0x58};
+        }
+        */
         byte[] setCommand = new byte[1+value_bytes.length];
         setCommand[0] = setting;
         for(int i=0; i<value_bytes.length; i++) {
@@ -687,19 +740,17 @@ public class UsbHelper {
     }
 
     private byte[] getBytes(int toConvert, int numBytes) {
+        byte[] bytes = ByteBuffer.allocate(4).putInt(toConvert).array();
+
         //converts int to byte array
         if (numBytes == 1) {
-            return new byte[] {(byte) toConvert};
+            return new byte[] {bytes[3]};
         }
         if (numBytes == 2) {
-            return new byte[] {(byte)((toConvert & 0xFF)>>>8),
-                    (byte)((toConvert)&0xFF)};
+            return new byte[] {bytes[2], bytes[3]};
         }
 
-        return new byte[] {(byte)((toConvert&0xFF)>>>24),
-                (byte)((toConvert >>> 16)&0xFF),
-                (byte)((toConvert >>> 8)&0xFF),
-                (byte)((toConvert)&0xFF)};
+        return new byte[] {bytes[0], bytes[1], bytes[2], bytes[3]};
     }
 
     private boolean claimInterface() {
