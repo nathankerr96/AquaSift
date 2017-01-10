@@ -1,42 +1,25 @@
 package com.example.hjd.aquasift.Main;
 
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
-import android.os.AsyncTask;
 import android.os.Process;
-import android.provider.ContactsContract;
-import android.support.annotation.FloatRange;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.hjd.aquasift.Misc.DbHelper;
-import com.example.hjd.aquasift.Misc.FTDriver;
+import com.example.hjd.aquasift.Misc.LinearSweepTask;
 import com.example.hjd.aquasift.Misc.UsbHelper;
 import com.example.hjd.aquasift.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class StartTest extends AppCompatActivity {
@@ -56,12 +39,12 @@ public class StartTest extends AppCompatActivity {
         setContentView(R.layout.activity_start_test);
 
         Bundle b = getIntent().getExtras();
-        String[] commands = b.getStringArray(MainActivity.COMMANDS_EXTRA);
+        int[] commands = b.getIntArray(MainActivity.COMMANDS_EXTRA);
 
-        String command1 = commands[0];
-        String command2 = commands[1];
-        String command3 = commands[2];
-        String command4 = commands[3];
+        int command1 = commands[0];
+        int command2 = commands[1];
+        int command3 = commands[2];
+        int command4 = commands[3];
 
 
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
@@ -76,9 +59,9 @@ public class StartTest extends AppCompatActivity {
         usbHelper.setDepositionTime(1000);
         usbHelper.setDepositionVoltage(600);
         usbHelper.setQuietTime(0);
-        usbHelper.setSweepStartVoltage(600);
-        usbHelper.setSweepEndVoltage(-300);
-        usbHelper.setSweepRate(900);
+        usbHelper.setSweepStartVoltage(-200); //600
+        usbHelper.setSweepEndVoltage(600); //-300
+        usbHelper.setSweepRate(100); //900
         usbHelper.setDataRate(5);
         usbHelper.setCyclic(1);
         usbHelper.setNumCycles(1);
@@ -86,10 +69,16 @@ public class StartTest extends AppCompatActivity {
 
 
         graph = (GraphView) findViewById(R.id.graph);
+        /*
         graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(-400);
-        graph.getViewport().setMaxX(800);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinX(-500);
+        graph.getViewport().setMaxX(500);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(200);
+        */
 
+        /*
         int numCycles = usbHelper.getNumCycles();
         if (usbHelper.isCyclic() == 1) {
             numCycles *= 2;
@@ -99,8 +88,17 @@ public class StartTest extends AppCompatActivity {
         lineGraphSeriesList = new ArrayList<>(numCycles);
 
 
-        RunTestTask runTest = new RunTestTask();
-        runTest.execute();
+        //LinearSweepTask runTest = new LinearSweepTask(this, usbHelper, graph);
+        //runTest.execute();
+
+        */
+
+        LinearSweepTask runLinearSweep = new LinearSweepTask(usbHelper, this,
+                this.getApplicationContext());
+        runLinearSweep.execute();
+
+
+
 
         save_data_button = (Button) findViewById(R.id.save_data_button);
         save_data_button.setVisibility(View.INVISIBLE);
@@ -123,194 +121,8 @@ public class StartTest extends AppCompatActivity {
     }
 
 
-    private class RunTestTask extends AsyncTask<String, Integer, String> {
 
-        ProgressDialog progressDialog;
-        int maxProgress;
-
-        int numCycles;
-        int depositionEnabled;
-        int gainResistor;
-        int startVoltage;
-        int endVoltage;
-        float voltageIncrement;
-
-        @Override
-        protected void onPreExecute() {
-            numCycles = usbHelper.getNumCycles();
-            depositionEnabled = usbHelper.getDepositionStatus();
-            gainResistor = usbHelper.getGainResistor();
-            startVoltage = usbHelper.getSweepStartVoltage();
-            endVoltage = usbHelper.getSweepEndVoltage();
-            voltageIncrement = usbHelper.getSweepVoltageIncrement();
-
-            //have a progress element for each cycles + deposition period
-            if (numCycles == 0) {
-                maxProgress = 1;
-            } else {
-                maxProgress = 2 * numCycles;
-            }
-            maxProgress += depositionEnabled;
-
-            progressDialog = new ProgressDialog(StartTest.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setMax(maxProgress);
-            progressDialog.setProgress(1);
-
-            if (depositionEnabled == 1) {
-                progressDialog.setMessage("Deposition Period");
-            } else {
-                progressDialog.setMessage("Sweep 1/" + Integer.toString(maxProgress));
-            }
-
-            //TODO Maybe check to make sure not already showing?
-            progressDialog.show();
-
-            usbHelper.startLinearSweep();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            int toUpdate = values[0];
-            List<Integer> toGraph = dataList.get(toUpdate);
-            Log.d("DEBUGGING", "SIZE2: " + toGraph.size());
-            LineGraphSeries<DataPoint> lineGraphSeries = new LineGraphSeries<>();
-
-            progressDialog.setProgress(toUpdate+1);
-            progressDialog.setMessage("Sweep " + Integer.toString(toUpdate+1) + "/" +
-                                            Integer.toString(maxProgress));
-
-            int currentVoltage;
-            if (startVoltage > endVoltage) {
-                if (toUpdate % 2 == 1) {
-                    currentVoltage = endVoltage;
-                    for (int i = 0; i < toGraph.size(); i++) {
-                        int current = (int)((toGraph.get(i)-2047) * (3.3/4096) / gainResistor * 1000000);
-                        DataPoint dp = new DataPoint(currentVoltage, current);
-                        lineGraphSeries.appendData(dp, false, 200000);
-                        currentVoltage += voltageIncrement;
-                        Log.d("DEBUGGING", "Graphing: " + Integer.toString(toGraph.get(i)) +
-                                "  Voltage: " + Float.toString(currentVoltage));
-                    }
-                } else {
-                    currentVoltage = endVoltage;
-                    for (int i=toGraph.size()-1; i >= 0; i--) {
-                        int current = (int)((toGraph.get(i)-2047) * (3.3/4096) / gainResistor * 1000000);
-                        DataPoint dp = new DataPoint(currentVoltage, current);
-                        lineGraphSeries.appendData(dp, false, 200000);
-                        currentVoltage += voltageIncrement;
-                    }
-                }
-            } else {
-                if (toUpdate % 2 == 1) {
-                    currentVoltage = startVoltage;
-                    for (int i = 0; i < toGraph.size(); i++) {
-                        int current = (int)((toGraph.get(i)-2047) * (3.3/4096) / gainResistor * 1000000);
-                        DataPoint dp = new DataPoint(currentVoltage, current);
-                        lineGraphSeries.appendData(dp, false, 200000);
-                        currentVoltage += voltageIncrement;
-                    }
-                } else {
-                    currentVoltage = startVoltage;
-                    for (int i=toGraph.size()-1; i >= 0; i--) {
-                        int current = (int)((toGraph.get(i)-2047) * (3.3/4096) / gainResistor * 1000000);
-                        DataPoint dp = new DataPoint(currentVoltage, current);
-                        lineGraphSeries.appendData(dp, false, 200000);
-                        currentVoltage += voltageIncrement;
-                    }
-                }
-            }
-
-            graph.addSeries(lineGraphSeries);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-
-            byte shelvedValue = 0;
-            boolean storedValue = false;
-
-            boolean pickupNext = false;
-            int currentList = 0;
-
-            boolean depositionInProgress = false;
-
-            List<Integer> workingList = new ArrayList<>();
-
-            while (true) {
-                byte[] data = {};
-                try {
-                    Thread.sleep(100);
-                    data = usbHelper.read();
-                    Log.d("DEBUGGING", Arrays.toString(data));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                for(int i=0; i<data.length-1; i+=2) {
-                    int value;
-
-                    if (storedValue) { //all data is 2 bytes so handle case when second byte was cut off
-                        value = ((shelvedValue & 0xFF) << 8) | (data[i] & 0xFF);
-                        i -= 1;
-                        storedValue = false;
-                    } else {
-                        value = ((data[i] & 0xFF) << 8) | (data[i + 1] & 0xFF);
-                    }
-
-                    if (pickupNext) { //next sequence number
-                        currentList = value - 1;
-                        pickupNext = false;
-                        continue;
-                    }
-                    if (value == 0x8200) { //next sequence indicator
-                        pickupNext = true;
-
-                        continue;
-                    }
-                    if (value == 0xFF00) { //End of Block
-                        if (!depositionInProgress) {
-                            dataList.add(workingList);
-                            Log.d("DEBUGGING", "SIZE: " + Integer.toString(workingList.size()));
-                            publishProgress(currentList);
-
-                        }
-                        workingList = new ArrayList<>();
-
-                        depositionInProgress = false;
-                        continue;
-                    }
-                    if (value == 0x8000) {
-                        //start of deposition
-                        depositionInProgress = true;
-                        continue;
-                    }
-                    if (value == 0xFFF0) {
-                        publishProgress(currentList);
-
-                        return null; //end
-                    }
-
-
-                    workingList.add(value);
-
-
-                    if (i + 2 == data.length - 1) {
-                        shelvedValue = data[i + 2];
-                        storedValue = true;
-                        i += 1;
-                    }
-                }
-            }
-        }
-    }
-
+    /*
     private class RunTest extends AsyncTask<String, Integer, LineGraphSeries> {
 
         int numCycles;
@@ -435,9 +247,10 @@ public class StartTest extends AppCompatActivity {
             }
         }
 
+
         @Override
         protected void onProgressUpdate(Integer... passedValue) {
-            /*
+
             int value = passedValue[0].intValue();
             float voltage = passedValue[1].floatValue();
             int seriesNum = passedValue[2].intValue();
@@ -445,7 +258,7 @@ public class StartTest extends AppCompatActivity {
 
             DataPoint dp = new DataPoint(voltage, value);
             lineGraphSeriesList.get(seriesNum).appendData(dp, false, 100000);
-            */
+
 
             int listToAdd = passedValue[0];
             int listSize = dataList.get(listToAdd).size();
@@ -517,6 +330,7 @@ public class StartTest extends AppCompatActivity {
             //graph.addSeries(s);
         }
     }
+    */
 
     private class SaveData implements Runnable {
 

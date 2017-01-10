@@ -153,11 +153,14 @@ public class NewTestFragment extends Fragment {
 
 
 
-        String[] test_types = new String[defaultTests.length + savedTests.length];
+        String[] test_types = new String[defaultTests.length + savedTests.length + 1];
         for (int i=0; i<defaultTests.length; i++) {
             test_types[i] = defaultTests[i].testName;
         }
 
+
+        //Add Custom Test to test_types
+        test_types[test_types.length-1] = "Custom";
 
 
         //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -231,7 +234,7 @@ public class NewTestFragment extends Fragment {
             public void onClick(View v) {
                 Intent start_test_intent = new Intent(getActivity(), StartTest.class);
 
-                String[] commands = {"1", "0", "3", "4"};
+                int[] commands = {1,2,3,4};
 
                 start_test_intent.putExtra(MainActivity.COMMANDS_EXTRA, commands);
 
