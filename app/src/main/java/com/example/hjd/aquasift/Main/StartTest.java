@@ -59,11 +59,11 @@ public class StartTest extends AppCompatActivity {
         usbHelper.setDepositionTime(1000);
         usbHelper.setDepositionVoltage(600);
         usbHelper.setQuietTime(0);
-        usbHelper.setSweepStartVoltage(-200); //600
+        usbHelper.setSweepStartVoltage(-300); //600
         usbHelper.setSweepEndVoltage(600); //-300
-        usbHelper.setSweepRate(100); //900
+        usbHelper.setSweepRate(900); //900
         usbHelper.setDataRate(5);
-        usbHelper.setCyclic(1);
+        usbHelper.setCyclic(0); //1
         usbHelper.setNumCycles(1);
         usbHelper.getSettings();
 
