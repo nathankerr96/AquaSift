@@ -1,6 +1,7 @@
 package com.example.hjd.aquasift.Misc;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -24,12 +25,18 @@ public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
     private Activity activity;
     private Context context;
 
+    private ProgressDialog progressDialog;
+
+
     ArrayList<ArrayList<Integer>> dataList;
 
-    public LinearSweepTask(UsbHelper usbHelper, Activity activity, Context context) {
+    public LinearSweepTask(UsbHelper usbHelper, Activity activity, Context context, ProgressDialog progressDialog) {
         this.usbHelper = usbHelper;
         this.activity = activity;
         this.context = context;
+        this.progressDialog = progressDialog;
+
+
 
         int listSize;
 
@@ -47,6 +54,13 @@ public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
         */
 
         dataList = new ArrayList<>();
+    }
+
+    @Override
+    protected void onPreExecute() {
+        progressDialog.setMessage("Conducting Linear Sweep");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
     }
 
     @Override
@@ -130,7 +144,7 @@ public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
         //super.onPostExecute(aVoid);
 
         DisplayResultsTask displayResultsTask = new DisplayResultsTask(usbHelper, activity,
-                context, dataList);
+                context, dataList, progressDialog);
         displayResultsTask.execute();
     }
 }
