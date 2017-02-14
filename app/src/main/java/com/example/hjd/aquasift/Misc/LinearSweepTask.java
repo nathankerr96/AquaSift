@@ -20,7 +20,6 @@ import java.util.List;
 public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
 
 
-
     private UsbHelper usbHelper;
     private Activity activity;
     private Context context;
@@ -117,7 +116,7 @@ public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
                     }
                     workingList = new ArrayList<>();
                     continue;
-                }
+                        }
                 if (value == 0x8000) { //start of deposition
                     depositionInProgress = true;
                     continue;
@@ -135,7 +134,6 @@ public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
                     i += 1;
                 }
             }
-
         }
     }
 

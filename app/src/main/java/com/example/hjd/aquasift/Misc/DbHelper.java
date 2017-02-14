@@ -13,9 +13,9 @@ public class DbHelper extends SQLiteOpenHelper{
 
     public static final String COL_ENTRY_ID = "entry";
     public static final String COL_DATE = "date";
-    public static final String COL_USER_ID = "user_id";
-    public static final String COL_RAW_DATA = "raw_data";
-    public static final String COL_TEST_TYPE = "test_type";
+    public static final String COL_USER_ID = "userId";
+    public static final String COL_RAW_DATA = "rawData";
+    public static final String COL_TEST_TYPE = "testType";
 
     public static final String DATABASE_NAME = "AquaSiftDatabase";
     public static final int DATABASE_VERSION = 11;
