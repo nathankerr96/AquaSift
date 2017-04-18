@@ -72,15 +72,18 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
 
+
         DbHelper dbHelper = new DbHelper(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 DbHelper.COL_ENTRY_ID,
-                DbHelper.COL_USER_ID,
                 DbHelper.COL_DATE,
-                DbHelper.COL_RAW_DATA,
-                DbHelper.COL_TEST_TYPE
+                DbHelper.COL_LAT,
+                DbHelper.COL_LONG,
+                DbHelper.COL_TEST_TYPE,
+                DbHelper.COL_PEAK_VALUES,
+                DbHelper.COL_CONCENTRATION
         };
 
         Cursor c = db.query(
@@ -95,11 +98,20 @@ public class HistoryFragment extends Fragment {
 
         Log.d("DEBUGGING", "ENTRIES FOUND: " + c.getCount());
 
-        String[] dates = new String[c.getCount()];
-        String[] types = new String[c.getCount()];
-        Series[] series = new Series[c.getCount()];
+        final String[] titles = new String[c.getCount()];
 
-        test_ids = new int[c.getCount()];
+        int count = c.getCount();
+
+        test_ids = new int[count];
+        final String[] dates = new String[count];
+        final String[] lats = new String[count];
+        final String[] longs = new String[count];
+        final String[] types = new String[count];
+        final String[] peaks = new String[count];
+        final String[] concentration = new String[count];
+        //Series[] series = new Series[c.getCount()];
+
+
 
         if(c.getCount() != 0) {
 
@@ -107,13 +119,23 @@ public class HistoryFragment extends Fragment {
             c.moveToFirst();
             int i=0;
             while (!c.isAfterLast()) {
-                test_ids[i] = c.getInt(c.getColumnIndex(DbHelper.COL_ENTRY_ID));
+
                 //String user_id = c.getString(c.getColumnIndex(DbHelper.COL_USER_ID));
 
-                dates[i] = c.getString(c.getColumnIndex(DbHelper.COL_DATE));
-                types[i] = c.getString(c.getColumnIndex(DbHelper.COL_TEST_TYPE));
-                String raw_data_string = c.getString(c.getColumnIndex(DbHelper.COL_RAW_DATA));
 
+                test_ids[i] = c.getInt(c.getColumnIndex(DbHelper.COL_ENTRY_ID));
+
+                titles[i] = Integer.toString(test_ids[i]);
+                dates[i] = c.getString(c.getColumnIndex(DbHelper.COL_DATE));
+                lats[i] = c.getString(c.getColumnIndex(DbHelper.COL_LAT));
+                longs[i] = c.getString(c.getColumnIndex(DbHelper.COL_LONG));
+                types[i] = c.getString(c.getColumnIndex(DbHelper.COL_TEST_TYPE));
+                peaks[i] = c.getString(c.getColumnIndex(DbHelper.COL_PEAK_VALUES));
+                concentration[i] = c.getString(c.getColumnIndex(DbHelper.COL_CONCENTRATION));
+
+                //String raw_data_string = c.getString(c.getColumnIndex(DbHelper.COL_DATE));
+
+                /*
                 String[] raw_data = raw_data_string.split(", ");
                 raw_data[0] = raw_data[0].replace("[", "");
                 raw_data[raw_data.length-1] = raw_data[raw_data.length-1].replace("]", "");
@@ -125,6 +147,7 @@ public class HistoryFragment extends Fragment {
                 }
 
                 series[i] = new LineGraphSeries(data);
+                */
 
                 c.moveToNext();
                 i++;
@@ -135,7 +158,7 @@ public class HistoryFragment extends Fragment {
 
         ListView main_history_view = (ListView) view.findViewById(R.id.history_list_view);
 
-        main_history_view.setAdapter(new HistoryAdapter(this, series, dates, types));
+        main_history_view.setAdapter(new HistoryAdapter(this, titles, dates, types));
         main_history_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -143,7 +166,11 @@ public class HistoryFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
 
-                HistoryDetailFragment newDetailFragment = new HistoryDetailFragment();
+                String[] itemData = new String[] {
+                    titles[position], dates[position], lats[position], longs[position], types[position],
+                        peaks[position], concentration[position]
+                };
+                HistoryDetailFragment newDetailFragment = HistoryDetailFragment.newInstance(itemData);
                 fragmentTransaction.addToBackStack("Detail");
 
                 Bundle bundle = new Bundle();
@@ -155,8 +182,10 @@ public class HistoryFragment extends Fragment {
             }
         });
 
+
         return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

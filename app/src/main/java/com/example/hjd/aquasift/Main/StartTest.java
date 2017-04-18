@@ -86,7 +86,7 @@ public class StartTest extends AppCompatActivity {
         save_data_button = (Button) findViewById(R.id.save_data_button);
         save_data_button.setVisibility(View.INVISIBLE);
 
-
+/*
         save_data_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,30 +99,11 @@ public class StartTest extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        */
     }
 
-    private class SaveData implements Runnable {
 
-        public void run() {
-            DbHelper dbHelper = new DbHelper(getBaseContext());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            //TODO FIX THIS!!
-            String raw_data_string = "Temp";
-
-            ContentValues values = new ContentValues();
-            values.put(DbHelper.COL_USER_ID, "343");
-            values.put(DbHelper.COL_DATE, "12/23/16");
-            values.put(DbHelper.COL_RAW_DATA, raw_data_string);
-            values.put(DbHelper.COL_TEST_TYPE, "Arsenic");
-
-            db.insertOrThrow(DbHelper.TABLE_NAME, null, values);
-
-            Log.d("DEBUGGING", raw_data_string);
-            Log.d("DEBUGGING", "THREAD FINISHED");
-        }
-
-    }
 }
 
 

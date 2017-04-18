@@ -10,6 +10,7 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,16 +24,29 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
+import com.example.hjd.aquasift.Misc.NetworkTestTask;
 import com.example.hjd.aquasift.Misc.TestType;
+import com.example.hjd.aquasift.Misc.UploadDataTask;
 import com.example.hjd.aquasift.Misc.UsbHelper;
 import com.example.hjd.aquasift.R;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -227,8 +241,6 @@ public class NewTestFragment extends Fragment {
         }
         getContext().registerReceiver(usbReceiver, filter);
 
-
-
         start_test_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,11 +255,6 @@ public class NewTestFragment extends Fragment {
                 startActivity(start_test_intent);
             }
         });
-
-
-
-
-
 
 
         return view;

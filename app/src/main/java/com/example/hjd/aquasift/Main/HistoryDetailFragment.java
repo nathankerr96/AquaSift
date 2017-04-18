@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.hjd.aquasift.Misc.UploadDataTask;
 import com.example.hjd.aquasift.R;
 
 
@@ -24,22 +26,26 @@ public class HistoryDetailFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private String entryId;
+    private String date;
+    private String latitude;
+    private String longitude;
+    private String testType;
+    private String peakValues;
+    private String concentration;
+
     public HistoryDetailFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HistoryDetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HistoryDetailFragment newInstance(String param1, String param2) {
-        HistoryDetailFragment fragment = new HistoryDetailFragment();
 
+    public static HistoryDetailFragment newInstance(String[] params) {
+        HistoryDetailFragment fragment = new HistoryDetailFragment();
+        Bundle args = new Bundle();
+
+        args.putStringArray("info", params);
+
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -47,14 +53,36 @@ public class HistoryDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String[] params = getArguments().getStringArray("info");
+        entryId = params[0];
+        date = params[1];
+        latitude = params[2];
+        longitude = params[3];
+        testType = params[4];
+        peakValues = params[5];
+        concentration = params[6];
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history_detail, container, false);
 
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_history_detail, container, false);
+
+        Button uploadDataButton = (Button) view.findViewById(R.id.upload_data_button);
+        uploadDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] dataToUpload = new String[] {
+                        date, latitude, longitude, testType, peakValues, concentration
+                };
+                UploadDataTask uploadDataTask = new UploadDataTask(dataToUpload);
+                uploadDataTask.execute();
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

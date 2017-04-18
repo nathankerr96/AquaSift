@@ -2,21 +2,30 @@ package com.example.hjd.aquasift.Misc;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.hjd.aquasift.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
+import static com.example.hjd.aquasift.Misc.DbHelper.packGraphData;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 
@@ -40,10 +49,13 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
 
     private ArrayList<ArrayList<Pair<Float, Float>>> currentList;
     private ArrayList<ArrayList<Pair<Float, Float>>> smoothedCurrentList;
+    private ArrayList<ArrayList<DataPoint>> graphedData;
 
     private ProgressDialog progressDialog;
 
     private GraphView graph;
+
+    private Long time;
 
     public DisplayResultsTask(UsbHelper usbHelper, Activity activity,
                               Context context, ArrayList<ArrayList<Integer>> dataList, ProgressDialog progressDialog) {
@@ -69,6 +81,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
 
         currentList = new ArrayList<>();
         smoothedCurrentList = new ArrayList<>();
+        graphedData = new ArrayList<>();
 
         if (startVoltage > endVoltage) {
             reverse = 1;
@@ -153,8 +166,12 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             smoothedCurrentList.add(activeSmoothedCurrentList);
 
 
+
             DataPoint[] toPublish = dataPointsToGraph.toArray(new DataPoint[dataPointsToGraph.size()]);
             publishProgress(toPublish);
+            Log.d("DEBUGGING", graphedData.toString());
+            Log.d("DEBUGGING", dataPointsToGraph.toString());
+            graphedData.add(dataPointsToGraph);
         }
 
 
@@ -198,6 +215,62 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         graph.getViewport().setScalable(true);
 
 
+
+
         progressDialog.dismiss();
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        //String x = DbHelper.packGraphData(graphedData);
+
+
+        time = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
+        String dateString = sdf.format(time);
+        TextView dateTextView = (TextView) activity.findViewById(R.id.results_date_text);
+        dateTextView.setText(dateString);
+
+        Button saveDataButton = (Button) activity.findViewById(R.id.save_data_button);
+        saveDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SaveData saveDataThread = new SaveData();
+                saveDataThread.run();
+            }
+        });
+
+        saveDataButton.setVisibility(View.VISIBLE);
+
+    }
+
+    private class SaveData implements Runnable {
+
+        public void run() {
+            DbHelper dbHelper = new DbHelper(activity.getBaseContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            String latitude = "100.1";
+            String longitude = "100.1";
+
+            String concentration = "11.2";
+
+            Calendar calendar = Calendar.getInstance();
+
+
+            ContentValues values = new ContentValues();
+            values.put(DbHelper.COL_DATE, Long.toString(time));
+            values.put(DbHelper.COL_TEST_TYPE, "Phosphate");
+            values.put(DbHelper.COL_LAT, latitude);
+            values.put(DbHelper.COL_LONG, longitude);
+            values.put(DbHelper.COL_PEAK_VALUES, "Peak Values");
+            values.put(DbHelper.COL_CONCENTRATION, concentration);
+
+            db.insertOrThrow(DbHelper.TABLE_NAME, null, values);
+
+            Log.d("DEBUGGING", "THREAD FINISHED");
+        }
+
     }
 }

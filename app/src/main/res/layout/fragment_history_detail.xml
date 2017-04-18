@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".Main.HistoryDetailFragment"
     android:padding="20dp">
 
@@ -16,13 +16,23 @@
         android:layout_height="20dp"
         android:id="@+id/history_detail_date"
         android:textSize="20sp"
-        android:gravity="center_horizontal"/>
+        android:gravity="left"
+        android:text="Test Type"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:id="@+id/history_detail_type"
         android:textSize="20sp"
-        android:gravity="center_horizontal"/>
+        android:gravity="left"
+        android:text="Date" />
+
+    <Button
+        android:id="@+id/upload_data_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Upload Data" />
 
 </LinearLayout>

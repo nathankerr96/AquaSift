@@ -9,6 +9,6 @@
 
     <!--Dimensions for the History Fragment-->
     <dimen name="history_list_view_margin">20dp</dimen>
-    <dimen name="history_date_text_size">20sp</dimen>
-    <dimen name="history_type_text_size">20sp</dimen>
+    <dimen name="history_date_text_size">15sp</dimen>
+    <dimen name="history_type_text_size">15sp</dimen>
 </resources>
