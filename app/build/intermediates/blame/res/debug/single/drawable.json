@@ -72,12 +72,12 @@
         "source": "C:\\Users\\HJD\\.android\\build-cache\\c417faa450c99512c6e594deda678ce046a02593\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
     },
     {
-        "merged": "C:\\Users\\HJD\\AndroidStudioProjects\\AquaSift\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
-        "source": "C:\\Users\\HJD\\.android\\build-cache\\c417faa450c99512c6e594deda678ce046a02593\\output\\res\\drawable\\abc_spinner_textfield_background_material.xml"
-    },
-    {
         "merged": "C:\\Users\\HJD\\AndroidStudioProjects\\AquaSift\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
         "source": "C:\\Users\\HJD\\.android\\build-cache\\c417faa450c99512c6e594deda678ce046a02593\\output\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\HJD\\AndroidStudioProjects\\AquaSift\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "C:\\Users\\HJD\\.android\\build-cache\\c417faa450c99512c6e594deda678ce046a02593\\output\\res\\drawable\\abc_spinner_textfield_background_material.xml"
     },
     {
         "merged": "C:\\Users\\HJD\\AndroidStudioProjects\\AquaSift\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
