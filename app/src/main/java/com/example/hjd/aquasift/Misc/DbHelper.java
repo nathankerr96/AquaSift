@@ -28,7 +28,7 @@ public class DbHelper extends SQLiteOpenHelper{
     //public static final String COL_GRAPH_DATA = "graphData";
 
     public static final String DATABASE_NAME = "AquaSiftDatabase";
-    public static final int DATABASE_VERSION = 16;
+    public static final int DATABASE_VERSION = 17;
 
 
 

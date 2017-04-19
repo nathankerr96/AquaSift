@@ -70,7 +70,7 @@ public class HistoryAdapter extends BaseAdapter {
             viewHolder.title_text_view.setText(titles[position]);
 
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH);
-            String dateString = sdf.format(dates[position]);
+            String dateString = sdf.format(Long.parseLong(dates[position]));
             viewHolder.date_text_view = (TextView) row_view.findViewById(R.id.history_item_date);
             viewHolder.date_text_view.setText(dateString);
 

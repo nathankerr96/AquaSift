@@ -256,9 +256,6 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
 
             String concentration = "11.2";
 
-            Calendar calendar = Calendar.getInstance();
-
-
             ContentValues values = new ContentValues();
             values.put(DbHelper.COL_DATE, Long.toString(time));
             values.put(DbHelper.COL_TEST_TYPE, "Phosphate");
