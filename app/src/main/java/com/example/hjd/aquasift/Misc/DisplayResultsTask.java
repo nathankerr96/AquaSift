@@ -52,6 +52,9 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
     private ArrayList<ArrayList<Pair<Float, Float>>> smoothedCurrentList;
     private ArrayList<ArrayList<DataPoint>> graphedData;
 
+    //MAX FINDING (TEMP)
+    private ArrayList<Pair<Float, Float>> peaks;
+
     private ProgressDialog progressDialog;
 
     private GraphView graph;
@@ -95,6 +98,9 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             reverse = 0;
         }
 
+        //PEAK FINDING (TEMP)
+        peaks = new ArrayList<>();
+
         progressDialog.setMessage("Smoothing and Graphing Data");
     }
 
@@ -128,7 +134,10 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             int start;
             int stop;
             int delta;
-            if (i+reverse % 2 == 0) { //low to high
+
+            boolean lowToHigh = ((i+reverse) % 2 == 0);
+
+            if (lowToHigh) { //low to high
                 start = 0;
                 stop = activeDataList.size();
                 delta = 1;
@@ -143,7 +152,21 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             int numPointsInAverage = 0;
             int windowWidth = 10;
 
+            //MAX FINDING (TEMP)
+            float leftCurrent = 0;
+            float leftVoltage = 0;
+            float rightCurrent = 0;
+            float rightVoltage = 0;
+            float extremeCurrent;
+            if (lowToHigh) {
+                extremeCurrent = 0;
+            } else {
+                extremeCurrent = 10000;
+            }
+            float extremeVoltage = 0;
+
             for (int j = start ; j != stop; j += delta) {
+                //TODO how can this be negative?
                 float current = (float)((activeDataList.get(j)) * (3.3/4096) / gainResistor * 1000000);
                 activeCurrentList.add(new Pair<>(currentVoltage, current));
 
@@ -168,12 +191,50 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
                     dataPointsToGraph.add(new DataPoint(currentVoltage, movingAverage));
                 }
 
+                //NEW MAX FINDING (TEMP) TODO PROOF OF CONCEPT
+                if (lowToHigh) {
+                    if (currentVoltage < -100 && currentVoltage > -150) {
+                        leftCurrent = movingAverage;
+                        leftVoltage = currentVoltage;
+                    }
+                    if (currentVoltage > 220 && currentVoltage < 250) {
+                        rightCurrent = movingAverage;
+                        rightVoltage = currentVoltage;
+                    }
+                    if (currentVoltage > 100 && currentVoltage < 170 && movingAverage > extremeCurrent) {
+                        extremeCurrent = movingAverage;
+                        extremeVoltage = currentVoltage;
+                    }
+                } else {
+                    if (currentVoltage < -200 && currentVoltage > -250) {
+                        leftCurrent = movingAverage;
+                        leftVoltage =  currentVoltage;
+                    }
+                    if (currentVoltage > 100 && currentVoltage < 120) {
+                        rightCurrent = movingAverage;
+                        rightVoltage = currentVoltage;
+                    }
+                    if (currentVoltage > -20 && currentVoltage < 40 && movingAverage < extremeCurrent) {
+                        extremeCurrent = movingAverage;
+                        extremeVoltage = currentVoltage;
+                    }
+                }
+
                 currentVoltage += voltageIncrement;
             }
 
             currentList.add(activeCurrentList);
             smoothedCurrentList.add(activeSmoothedCurrentList);
 
+            //MAX FINDING (TEMP)
+            float slope = (rightCurrent-leftCurrent) / (rightVoltage-leftVoltage);
+            Log.d("DEBUGGING", "Extreme Current: " + Float.toString(extremeCurrent));
+            Log.d("DEBUGGING", "Extreme Voltage: " + Float.toString(extremeVoltage));
+            Log.d("DEBUGGING", "Slope: " + Float.toString(slope));
+            float baseCurrent = leftCurrent + slope*(extremeVoltage-leftVoltage);
+            Log.d("DEBUGGING", "Base Current: " + Float.toString(baseCurrent));
+            float peak = abs(extremeCurrent-baseCurrent);
+            peaks.add(new Pair<>(extremeVoltage, peak));
 
 
             DataPoint[] toPublish = dataPointsToGraph.toArray(new DataPoint[dataPointsToGraph.size()]);
@@ -183,7 +244,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             graphedData.add(dataPointsToGraph);
         }
 
-
+        /*  --OLD MAX FINDING--
         ArrayList<Float> smoothedCurrentToPrint = new ArrayList<>();
         int increment = 10;
         for (int i=0; i<smoothedCurrentList.size(); i+=increment) {
@@ -207,6 +268,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
                 smoothedCurrentToPrint.add(currentValue);
             }
         }
+        */
 
         //Log.d("DEBUGGING", smoothedCurrentToPrint.subList(0,400).toString());
         //Log.d("DEBUGGING", smoothedCurrentToPrint.subList(400,800).toString());
@@ -251,6 +313,14 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         });
 
         saveDataButton.setVisibility(View.VISIBLE);
+
+        String peakString = "";
+        for (Pair<Float, Float> peakPair : peaks) {
+            Log.d("DEBUGGING", "Peak Voltage: " + Float.toString(peakPair.first));
+            Log.d("DEBUGGING", "Peak: " + Float.toString(peakPair.second));
+            peakString = peakString + Float.toString(peakPair.second) + ",";
+        }
+        Log.d("DEBUGGING", peakString);
 
     }
 
