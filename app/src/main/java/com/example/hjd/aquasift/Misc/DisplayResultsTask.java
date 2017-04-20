@@ -228,19 +228,19 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
 
             //MAX FINDING (TEMP)
             float slope = (rightCurrent-leftCurrent) / (rightVoltage-leftVoltage);
-            Log.d("DEBUGGING", "Extreme Current: " + Float.toString(extremeCurrent));
-            Log.d("DEBUGGING", "Extreme Voltage: " + Float.toString(extremeVoltage));
-            Log.d("DEBUGGING", "Slope: " + Float.toString(slope));
+            //Log.d("DEBUGGING", "Extreme Current: " + Float.toString(extremeCurrent));
+            //Log.d("DEBUGGING", "Extreme Voltage: " + Float.toString(extremeVoltage));
+            //Log.d("DEBUGGING", "Slope: " + Float.toString(slope));
             float baseCurrent = leftCurrent + slope*(extremeVoltage-leftVoltage);
-            Log.d("DEBUGGING", "Base Current: " + Float.toString(baseCurrent));
+            //Log.d("DEBUGGING", "Base Current: " + Float.toString(baseCurrent));
             float peak = abs(extremeCurrent-baseCurrent);
             peaks.add(new Pair<>(extremeVoltage, peak));
 
 
             DataPoint[] toPublish = dataPointsToGraph.toArray(new DataPoint[dataPointsToGraph.size()]);
             publishProgress(toPublish);
-            Log.d("DEBUGGING", graphedData.toString());
-            Log.d("DEBUGGING", dataPointsToGraph.toString());
+            //Log.d("DEBUGGING", graphedData.toString());
+            //Log.d("DEBUGGING", dataPointsToGraph.toString());
             graphedData.add(dataPointsToGraph);
         }
 
@@ -318,9 +318,14 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         for (Pair<Float, Float> peakPair : peaks) {
             Log.d("DEBUGGING", "Peak Voltage: " + Float.toString(peakPair.first));
             Log.d("DEBUGGING", "Peak: " + Float.toString(peakPair.second));
-            peakString = peakString + Float.toString(peakPair.second) + ",";
+            peakString = peakString + String.format("%.2f", peakPair.second) + ",";
         }
-        Log.d("DEBUGGING", peakString);
+        if (peakString.length() > 0) {
+            peakString = peakString.substring(0, peakString.length()-1);
+        }
+        TextView peakValuesTextView = (TextView) activity.findViewById(R.id.results_peak_text);
+        peakValuesTextView.setText(peakString);
+
 
     }
 
