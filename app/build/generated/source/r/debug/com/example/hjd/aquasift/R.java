@@ -23,6 +23,8 @@ public final class R {
         public static final int slide_out_right=0x7f05000b;
     }
     public static final class array {
+        /** Selected Low Pass Filter
+         */
         public static final int arsenicSettings=0x7f0b0000;
         public static final int available_tests=0x7f0b0001;
         public static final int custom_test_edittexts=0x7f0b0002;
@@ -31,6 +33,8 @@ public final class R {
         public static final int defaultTestIds=0x7f0b0005;
         public static final int fragment_names=0x7f0b0006;
         public static final int fragment_pictures=0x7f0b0007;
+        /** Selected Low Pass Filter
+         */
         public static final int phosphorousSettings=0x7f0b0008;
     }
     public static final class attr {

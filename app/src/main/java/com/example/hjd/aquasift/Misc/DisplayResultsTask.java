@@ -68,6 +68,8 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
 
     private Long time;
 
+    String peakString;
+
     public DisplayResultsTask(UsbHelper usbHelper, Activity activity,
                               Context context, ArrayList<ArrayList<Integer>> dataList, ProgressDialog progressDialog) {
         this.usbHelper = usbHelper;
@@ -322,7 +324,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         });
 
 
-        String peakString = "";
+        peakString = "";
         for (Pair<Float, Float> peakPair : peaks) {
             Log.d("DEBUGGING", "Peak Voltage: " + Float.toString(peakPair.first));
             Log.d("DEBUGGING", "Peak: " + Float.toString(peakPair.second));
@@ -349,17 +351,14 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             DbHelper dbHelper = new DbHelper(activity.getBaseContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            String latitude = "100.1";
-            String longitude = "100.1";
-
             String concentration = "11.2";
 
             ContentValues values = new ContentValues();
             values.put(DbHelper.COL_DATE, Long.toString(time));
             values.put(DbHelper.COL_TEST_TYPE, "Phosphate");
-            values.put(DbHelper.COL_LAT, latitude);
-            values.put(DbHelper.COL_LONG, longitude);
-            values.put(DbHelper.COL_PEAK_VALUES, "Peak Values");
+            values.put(DbHelper.COL_LAT, Double.toString(StartTest.bestLat));
+            values.put(DbHelper.COL_LONG, Double.toString(StartTest.bestLong));
+            values.put(DbHelper.COL_PEAK_VALUES, peakString);
             values.put(DbHelper.COL_CONCENTRATION, concentration);
 
             db.insertOrThrow(DbHelper.TABLE_NAME, null, values);
