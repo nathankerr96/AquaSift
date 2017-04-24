@@ -13,10 +13,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.hjd.aquasift.Main.StartTest;
 import com.example.hjd.aquasift.R;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -51,6 +54,10 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
     private ArrayList<ArrayList<Pair<Float, Float>>> currentList;
     private ArrayList<ArrayList<Pair<Float, Float>>> smoothedCurrentList;
     private ArrayList<ArrayList<DataPoint>> graphedData;
+
+    private float endAccuracy;
+    private double endLat;
+    private double endLong;
 
     //MAX FINDING (TEMP)
     private ArrayList<Pair<Float, Float>> peaks;
@@ -109,6 +116,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         float currentVoltage;
         int voltageDiff = abs(startVoltage-endVoltage);
         float voltageIncrement;
+
 
 
         for (int i=0; i < dataList.size(); i++) {
@@ -288,12 +296,13 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
 
 
 
-        progressDialog.dismiss();
+
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         //String x = DbHelper.packGraphData(graphedData);
+
 
 
         time = System.currentTimeMillis();
@@ -312,7 +321,6 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             }
         });
 
-        saveDataButton.setVisibility(View.VISIBLE);
 
         String peakString = "";
         for (Pair<Float, Float> peakPair : peaks) {
@@ -326,7 +334,13 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         TextView peakValuesTextView = (TextView) activity.findViewById(R.id.results_peak_text);
         peakValuesTextView.setText(peakString);
 
+        StartTest.listenerDefined = true;
 
+        saveDataButton.setEnabled(false);
+        saveDataButton.setVisibility(View.VISIBLE);
+        saveDataButton.setText(R.string.waiting_for_location);
+
+        progressDialog.dismiss();
     }
 
     private class SaveData implements Runnable {

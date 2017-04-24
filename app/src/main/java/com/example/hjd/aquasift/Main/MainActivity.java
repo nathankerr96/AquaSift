@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        //Enables button to open navigation drawer
+            //Enables button to open navigation drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 

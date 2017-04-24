@@ -33,6 +33,24 @@
         android:layout_height="wrap_content"
         android:id="@+id/results_peak_text" />
 
+    <TextView
+        android:id="@+id/results_accuracy_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accuracy" />
+
+    <TextView
+        android:id="@+id/results_lat_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Latitude" />
+
+    <TextView
+        android:id="@+id/results_long_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Longitude" />
+
     <Button
         android:layout_width="200dp"
         android:layout_height="50dp"

@@ -25,6 +25,11 @@
     <string name="nt_record_sequence">Record Deposition Sequence?</string>
     <string name="nt_start_test">Start Test</string>
 
+
+    <!--Results-->
+    <string name="save_data_button">Save Data</string>
+    <string name="waiting_for_location">Waiting For Location</string>
+
     <string-array name="custom_test_texts">
         <item>Deposition Time (ms):</item>
         <item>Select Filter:</item>

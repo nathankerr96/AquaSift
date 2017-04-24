@@ -1,19 +1,19 @@
 package com.example.hjd.aquasift.Main;
 
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.hardware.usb.UsbManager;
-import android.os.Process;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import com.example.hjd.aquasift.Misc.DbHelper;
 import com.example.hjd.aquasift.Misc.LinearSweepTask;
 import com.example.hjd.aquasift.Misc.UsbHelper;
 import com.example.hjd.aquasift.R;
@@ -22,15 +22,21 @@ import com.jjoe64.graphview.GraphView;
 
 public class StartTest extends AppCompatActivity {
 
-    Button save_data_button;
+    Button saveDataButton;
     GraphView graph;
 
 
     UsbManager manager;
     UsbHelper usbHelper;
 
+    //Location
+    public static double bestLat;
+    public static double bestLong;
+    public static float bestAccuracy;
+    public static boolean listenerDefined;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_test);
 
@@ -42,6 +48,59 @@ public class StartTest extends AppCompatActivity {
         int command3 = commands[2];
         int command4 = commands[3];
 
+        final TextView accuracyTextView = (TextView) findViewById(R.id.results_accuracy_text);
+        final TextView latTextView = (TextView) findViewById(R.id.results_lat_text);
+        final TextView longTextView = (TextView) findViewById(R.id.results_long_text);
+
+        saveDataButton = (Button) findViewById(R.id.save_data_button);
+        saveDataButton.setVisibility(View.INVISIBLE);
+
+        listenerDefined = false;
+        //Location
+        bestLat = -1;
+        bestLong = -1;
+        bestAccuracy = 10000;
+        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                float currAccuracy = location.getAccuracy();
+                Log.d("DEBUGGING", "Location Update");
+                if (currAccuracy < bestAccuracy) {
+                    bestLat = location.getLatitude();
+                    bestLong = location.getLongitude();
+                    bestAccuracy = currAccuracy;
+                    accuracyTextView.setText(Float.toString(bestAccuracy));
+                    latTextView.setText(Double.toString(bestLat));
+                    longTextView.setText(Double.toString(bestLong));
+                    Log.d("DEBUGGING", "Location Update: " + Float.toString(bestAccuracy));
+                }
+                if (bestAccuracy <= 42 && listenerDefined) {
+                    locationManager.removeUpdates(this);
+                    saveDataButton.setVisibility(View.VISIBLE);
+                    saveDataButton.setText(R.string.save_data_button);
+                    saveDataButton.setEnabled(true);
+
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {}
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
+        Criteria criteria = new Criteria();
+        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+        try {
+            locationManager.requestLocationUpdates(0,0,criteria,locationListener,null);
+        } catch (SecurityException e) {
+            Log.d("DEBUGGING", "Security Exception in Location updates");
+            e.printStackTrace();
+        }
 
         manager = (UsbManager) getSystemService(Context.USB_SERVICE);
 
@@ -54,7 +113,7 @@ public class StartTest extends AppCompatActivity {
         usbHelper.enableDeposition(1);
         usbHelper.setDepositionTime(1000);
         usbHelper.setDepositionVoltage(600);
-        usbHelper.setQuietTime(0);
+        usbHelper.setQuietTime(0); //Out of range?
         usbHelper.setSweepStartVoltage(-500); //600
         usbHelper.setSweepEndVoltage(500); //-300
         usbHelper.setSweepRate(900); //900
@@ -83,23 +142,9 @@ public class StartTest extends AppCompatActivity {
 
 
 
-        save_data_button = (Button) findViewById(R.id.save_data_button);
-        save_data_button.setVisibility(View.INVISIBLE);
 
-/*
-        save_data_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Thread save_data_thread = new Thread(new SaveData());
-                save_data_thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);
-                save_data_thread.run();
 
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
     }
 
 

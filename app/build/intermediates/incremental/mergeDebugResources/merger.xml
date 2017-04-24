@@ -1444,7 +1444,7 @@
         <item>20</item> 
         <item>1</item> 
         <item>0</item> 
-    </integer-array></file><file path="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\src\main\res\values\strings.xml" qualifiers=""><string name="drawer_close">Close Navigation Drawer</string><string name="nt_deposition_time">Deposition Time (ms):</string><string name="app_name">AquaSift</string><string name="nt_sweep_rate">Sweep Rate (mV/s):</string><string name="nt_sample_interval">ADC Sample Interval (ms):</string><string name="nt_record_sequence">Record Deposition Sequence?</string><string name="nt_title">Start New Test</string><string name="nt_selected_filter">Select Filter:</string><string-array name="fragment_names">
+    </integer-array></file><file path="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\src\main\res\values\strings.xml" qualifiers=""><string name="drawer_close">Close Navigation Drawer</string><string name="nt_deposition_time">Deposition Time (ms):</string><string name="app_name">AquaSift</string><string name="nt_sweep_rate">Sweep Rate (mV/s):</string><string name="nt_sample_interval">ADC Sample Interval (ms):</string><string name="save_data_button">Save Data</string><string name="nt_record_sequence">Record Deposition Sequence?</string><string name="nt_title">Start New Test</string><string name="nt_selected_filter">Select Filter:</string><string-array name="fragment_names">
         <item>New Test</item>
         <item>History</item>
         <item>Settings</item>
@@ -1457,7 +1457,7 @@
     </string-array><string name="hello_blank_fragment">Hello blank fragment</string><string-array name="available_tests">
         <item>Arsenic</item>
         <item>Other</item>
-    </string-array><string name="nt_start_test">Start Test</string><string name="nt_select_config">Select Configuration:</string><string name="drawer_open">Open Navigation Drawer</string></file><file path="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\src\main\res\values\styles.xml" qualifiers=""><style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </string-array><string name="nt_start_test">Start Test</string><string name="nt_select_config">Select Configuration:</string><string name="drawer_open">Open Navigation Drawer</string><string name="waiting_for_location">Waiting For Location</string></file><file path="C:\Users\HJD\AndroidStudioProjects\AquaSift\app\src\main\res\values\styles.xml" qualifiers=""><style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

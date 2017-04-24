@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.hjd.aquasift.Main.StartTest;
 import com.example.hjd.aquasift.Misc.DisplayResultsTask;
 import com.example.hjd.aquasift.Misc.UsbHelper;
 
@@ -140,7 +141,6 @@ public class LinearSweepTask extends AsyncTask<Void, Void, Void>{
     @Override
     protected void onPostExecute(Void aVoid) {
         //super.onPostExecute(aVoid);
-
         DisplayResultsTask displayResultsTask = new DisplayResultsTask(usbHelper, activity,
                 context, dataList, progressDialog);
         displayResultsTask.execute();

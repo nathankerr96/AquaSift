@@ -8,9 +8,11 @@ import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.hjd.aquasift.Misc.NetworkTestTask;
@@ -162,11 +165,6 @@ public class NewTestFragment extends Fragment {
             defaultTests[i] = new TestType(defaultTestNames[i], defaultTestSettings[i]);
         }
 
-
-
-
-
-
         String[] test_types = new String[defaultTests.length + savedTests.length + 1];
         for (int i=0; i<defaultTests.length; i++) {
             test_types[i] = defaultTests[i].testName;
@@ -247,12 +245,22 @@ public class NewTestFragment extends Fragment {
                 Intent start_test_intent = new Intent(getActivity(), StartTest.class);
 
                 int[] commands = {1,2,3,4};
-
                 start_test_intent.putExtra(MainActivity.COMMANDS_EXTRA, commands);
 
                 //Log.d("DEBUGGING", "PERMISSION: " + Boolean.toString(manager.hasPermission(targetDevice)));
 
-                startActivity(start_test_intent);
+                //TEST PROMPT TO TURN ON GPS
+                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+                String providerName = LocationManager.GPS_PROVIDER; //Use Criteria?
+                Log.d("DEBUGGING", "Provider Enabled: " + Boolean.toString(locationManager.isProviderEnabled(providerName)));
+                if (!locationManager.isProviderEnabled(providerName)) {
+                    Log.d("DEBUGGING", "Launch Intent");
+                    Toast.makeText(getContext(), "Please Enable GPS", Toast.LENGTH_SHORT).show();
+                    Intent turnOnGpsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    getActivity().startActivity(turnOnGpsIntent);
+                } else {
+                    startActivity(start_test_intent);
+                }
             }
         });
 
