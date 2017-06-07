@@ -1,6 +1,7 @@
 package com.example.hjd.aquasift.Misc;
 
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.io.BufferedReader;

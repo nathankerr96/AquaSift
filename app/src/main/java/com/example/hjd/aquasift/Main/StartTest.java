@@ -110,7 +110,7 @@ public class StartTest extends AppCompatActivity {
 
         usbHelper.setNumElectrodes(3);
         //usbHelper.setDataRate(50);
-        usbHelper.enableDeposition(1);
+        usbHelper.enableDeposition(0);
         usbHelper.setDepositionTime(1000);
         usbHelper.setDepositionVoltage(600);
         usbHelper.setQuietTime(0); //Out of range?
@@ -118,7 +118,7 @@ public class StartTest extends AppCompatActivity {
         usbHelper.setSweepEndVoltage(500); //-300
         usbHelper.setSweepRate(900); //900
         usbHelper.setDataRate(5);
-        usbHelper.setCyclic(0); //1
+        usbHelper.setCyclic(1); //1
         usbHelper.setNumCycles(1);
         usbHelper.getSettings();
 
@@ -138,12 +138,6 @@ public class StartTest extends AppCompatActivity {
         LinearSweepTask runLinearSweep = new LinearSweepTask(usbHelper, this,
                 this.getApplicationContext(), progressDialog);
         runLinearSweep.execute();
-
-
-
-
-
-
 
     }
 

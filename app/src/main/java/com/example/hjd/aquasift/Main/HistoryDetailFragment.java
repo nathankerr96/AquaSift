@@ -74,6 +74,7 @@ public class HistoryDetailFragment extends Fragment {
         uploadDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String[] dataToUpload = new String[] {
                         date, latitude, longitude, testType, peakValues, concentration
                 };

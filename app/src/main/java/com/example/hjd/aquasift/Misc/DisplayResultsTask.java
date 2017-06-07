@@ -32,6 +32,7 @@ import java.util.Locale;
 import static com.example.hjd.aquasift.Misc.DbHelper.packGraphData;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
+import static java.lang.Math.min;
 
 /**
  * Created by HJD on 12/30/2016.
@@ -102,6 +103,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
         graphedData = new ArrayList<>();
 
         if (startVoltage > endVoltage) {
+            Log.d("DEBUGGING", "High to Low");
             reverse = 1;
         } else {
             reverse = 0;
@@ -126,9 +128,10 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
             ArrayList<Pair<Float,Float>> activeCurrentList = new ArrayList<>();
             ArrayList<Pair<Float, Float>> activeSmoothedCurrentList = new ArrayList<>();
 
-            currentVoltage = startVoltage;
+            currentVoltage = min(startVoltage,endVoltage);
 
             voltageIncrement = (float)voltageDiff / activeDataList.size();
+            Log.d("DEBUGGING", "Voltage INC: " + Float.toString(voltageIncrement));
             //int numDataPoints = (int) (voltageDiff / voltageIncrement);
             //graph every nth point based on divisor = Total points to graph
             int criticalPoints = (int) Math.ceil((float)activeDataList.size()/300);
@@ -201,9 +204,10 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
                     dataPointsToGraph.add(new DataPoint(currentVoltage, movingAverage));
                 }
 
+                //
                 //NEW MAX FINDING (TEMP) TODO PROOF OF CONCEPT
                 if (lowToHigh) {
-                    if (currentVoltage < -100 && currentVoltage > -150) {
+                    if (currentVoltage < -140 && currentVoltage > -50) {
                         leftCurrent = movingAverage;
                         leftVoltage = currentVoltage;
                     }
@@ -211,7 +215,7 @@ public class DisplayResultsTask extends AsyncTask<Void, DataPoint, Void> {
                         rightCurrent = movingAverage;
                         rightVoltage = currentVoltage;
                     }
-                    if (currentVoltage > 100 && currentVoltage < 170 && movingAverage > extremeCurrent) {
+                    if (currentVoltage > -120 && currentVoltage < -70 && movingAverage > extremeCurrent) {
                         extremeCurrent = movingAverage;
                         extremeVoltage = currentVoltage;
                     }
